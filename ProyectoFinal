@@ -1,1 +1,24 @@
 
+# Funcion inicializar
+def startArray(r,c):
+    m = []
+    for i in range(r):
+        a = ['*']*c
+        m.append(a)
+    return m
+
+def show(mF):
+    print("1        2       3       4")
+    for i in range(len(mF)):
+        print()
+        for j in range(len(mF[i])):
+            print(mF[i][j],"\t",end=' ')
+        print(i+1)
+
+# Inicializamos la matriz
+m = startArray(4,4) # m = Matriz
+mb = startArray(4,4) # m = Matriz backend
+
+show(m)
+
+
