@@ -1,4 +1,7 @@
+import random as r
 
+
+# -------------------------------------------- Functions --------------------------------------------------------
 # Funcion inicializar
 def startArray(r,c):
     m = []
@@ -6,7 +9,7 @@ def startArray(r,c):
         a = ['*']*c
         m.append(a)
     return m
-
+# Muestra el array
 def show(mF):
     print("1        2       3       4")
     for i in range(len(mF)):
@@ -14,11 +17,88 @@ def show(mF):
         for j in range(len(mF[i])):
             print(mF[i][j],"\t",end=' ')
         print(i+1)
+# Lee determinadas lineas de un archivo
+def readLines(f,linesToRead):
+    for position, line in enumerate(f):
+        if position in linesToRead:
+            print(line)
 
-# Inicializamos la matriz
-m = startArray(4,4) # m = Matriz
-mb = startArray(4,4) # m = Matriz backend
+# -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- End Functions -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.--.-.-.-.-.-.-.
 
-show(m)
+# -------------------------------------------- Instruction reading --------------------------------------------------------
+
+# Abrir instrucciones y leerlas
+#f = open("instructions", "r")
+#linesToRead = [0,2] # Lee linea 1 y 3
+#
+#linesOption = [] # Lineas a leer para las opciones
+#readLines(f,linesOption)
+#
+#linesMenu = [] # Lineas a leer en menú
+#readLines(f,linesMenu) # Da las instrucciones del menú
+
+# -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- End instruction reading -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.--.-.-.-.-.-.-.
+
+# -------------------------------------------- Initial considerations  --------------------------------------------------------
+
+# Opcion jugar 
+#
+#nJ = int(input("Ingresa el número de jugadores: ")) # Número de jugadores de line
+#linesPlayers = [] # Instrucciones de jugadores
+#readLines(f,linesPlayers)
+#P1 = input("Ingresa el nombre del primer jugador: ")
+#P2 = input("Ingresa el nombre del segundo jugador: ")
+
+
+
+# De las coordenadas que el usuario elija, será equivalente a una x posicion en valueMatrix
+selectionDictionary = {
+  "00": "0",    "01": "1",  "02": "2",  "03": "3",
+  "10": "4",    "11": "5",  "12": "6",  "13": "7",
+  "20": "8",    "21": "9",  "22": "10", "23": "11",
+  "30": "12",   "31": "13", "32": "14", "33": "15"
+}
+
+# -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- End Initial considerations -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.--.-.-.-.-.-.-.
+
+
+
+# ------------------------------------------------ Game --------------------------------------------------------
+playGame = 1
+while playGame:
+    # ------------------------- Initial instances in game --------------------------------
+    # Inicializamos la matriz
+    m = startArray(4,4) # m = Matriz
+
+    valueMatrix = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8] # Números pares que se usarán
+    r.shuffle(valueMatrix) # Los revolvemos y guardamos contemplandolo como otro array
+    cG = True # Continuidad del juego
+    nSelectedP1 = []; nSelectedP2 = [] # Coordenadas seleccionadas de cada jugador
+    
+    #  -.-.-.-.-.-.-.-.-.-.-.-.-. Initial instances in game  -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
+    
+    
+    while cG:
+        show(m)
+        coordinate = input("Ingresa una coordenada: ")
+        coordinate = (str(int(coordinate[0])-1)+str(int(coordinate[1])-1))
+        # Considerar que sea una coordenada correcta, dentro de 00 y 44
+        if coordinate in selectionDictionary:
+            m[int(coordinate[0])][int(coordinate[1])] = valueMatrix[int(selectionDictionary[coordinate])]
+            print(valueMatrix[int(selectionDictionary[coordinate])])
+            #Aqui voooy
+            print("Playing...")
+        else:
+            print("Esta no es una coordenada adecuada!!")
+        
+
+    print("\t\t\t¿Quieres jugar de nuevo?\n")
+    playGame = int(input("Ingresa 1 y enter para jugar de nuevo!\t\Ingresa 0 y enter para cerrar el juego :("))
+
+print("\n\t\t\tNos vemos la próxima!")
+
+
+# -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.- End game -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.--.-.-.-.-.-.-.
+
 
 
