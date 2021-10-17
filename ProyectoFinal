@@ -48,6 +48,7 @@ def readLines(f,linesToRead):
 #readLines(f,linesPlayers)
 #P1 = input("Ingresa el nombre del primer jugador: ")
 #P2 = input("Ingresa el nombre del segundo jugador: ")
+P1 = "Juan"; P2 = "Roberto"
 
 
 
@@ -64,36 +65,103 @@ selectionDictionary = {
 
 
 # ------------------------------------------------ Game --------------------------------------------------------
-playGame = 1
+playGame = 1 # Inicialización del juego
 while playGame:
     # ------------------------- Initial instances in game --------------------------------
-    # Inicializamos la matriz
-    m = startArray(4,4) # m = Matriz
 
+    m = startArray(4,4) # Inicializamos la matriz (m = Matrix)
     valueMatrix = [1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8] # Números pares que se usarán
     r.shuffle(valueMatrix) # Los revolvemos y guardamos contemplandolo como otro array
-    cG = True # Continuidad del juego
-    nSelectedP1 = []; nSelectedP2 = [] # Coordenadas seleccionadas de cada jugador
+    gC = True # Continuidad del juego (gC = Game Continuity)
+    nSP1 = []; nSP2 = [] # Números seleccionados por cada jugador (nSP1 = Number Selected Player 1)
+    cSP1 = []; cSP2 = [] # Coordenadas seleccionadas por cada jugador (cSP1 = Coordinate Selected Player 1)
+    pInG = [P1,P2]; pInGP = 0 # Jugador en juego y su posicion (pInGP = Player in Game Position)
+    pT = [1,1] # Turno (pT = Player turn)
     
     #  -.-.-.-.-.-.-.-.-.-.-.-.-. Initial instances in game  -.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-
-    
-    
-    while cG:
+    while gC:
+        print("\n------------------------------------")
         show(m)
-        coordinate = input("Ingresa una coordenada: ")
-        coordinate = (str(int(coordinate[0])-1)+str(int(coordinate[1])-1))
-        # Considerar que sea una coordenada correcta, dentro de 00 y 44
-        if coordinate in selectionDictionary:
-            m[int(coordinate[0])][int(coordinate[1])] = valueMatrix[int(selectionDictionary[coordinate])]
-            print(valueMatrix[int(selectionDictionary[coordinate])])
-            #Aqui voooy
-            print("Playing...")
-        else:
-            print("Esta no es una coordenada adecuada!!")
-        
+        print("\n------------------------------------")
 
+        # Comprobamos si ya ingresó 2 numeros o no
+        if len(nSP1) == 2 or len(nSP2) == 2:
+            coordinate = input("\nIncorrecto\nIngresa 11 para cambiar al turno {} del jugador {}: \n".format(pT[pInGP],pInG[pInGP]))
+            print(nSP1,nSP2)
+        else: 
+            coordinate = input("\nIngresa primero la columna, luego el renglón {}: ".format(pInG[pInGP]))
+        # Cambio a coordenadas reales de lectura (Ej. 11 cambia a 00)
+        coordinate = str(int(coordinate[0])-1)+str(int(coordinate[1])-1) 
+        
+        # Considerar que sea una coordenada correcta, dentro de 00 y 44
+        if coordinate in selectionDictionary: 
+
+            # Obtenemos el valor equivalente en ValueMatrix y lo mostramos en la matriz
+            m[int(coordinate[0])][int(coordinate[1])] = valueMatrix[int(selectionDictionary[coordinate])] 
+            
+            # Denotamos cual jugador esta actualmente en turno
+            if pInGP == 0:
+
+                # Guardamos el valor y coordenada seleccionados
+                nSP1.append(valueMatrix[int(selectionDictionary[coordinate])]) 
+                cSP1.append(coordinate) 
+                if len(nSP1) == 3: 
+
+                    # Comprobamos que no use la misma casilla
+                    if cSP1[0] == cSP1[1]: 
+                        print("Esta casilla es la misma que seleccionaste antes!!")
+                        m = startArray(4,4)
+                        pInGP = 1
+                    else:
+                        m = startArray(4,4)
+
+                        # Valorar si son valores iguales y si es asi, un jugador gana
+                        if nSP1[0] == nSP1[1]: 
+                            gC = False # Terminar juego
+                        else: # En el caso que no gana, se reinician los valores y cambia el turno
+                            nSP1.clear();cSP1.clear()
+                            print("-.-.-.-.-.-.-.- Siguiente turno!! -.-.-.-.-.-.-.-")
+                            m = startArray(4,4) # Reinicio la matriz mostrado
+                            pInGP = 1
+                            pT[0] += 1
+                elif len(nSP1) == 2:
+                    if nSP1[0] == nSP1[1]: # Valorar si son números iguales
+                            gC = False # Terminar juego
+            elif pInGP == 1:
+                nSP2.append(valueMatrix[int(selectionDictionary[coordinate])]) # Guardamos el valor seleccionado
+                cSP2.append(coordinate)
+                if len(nSP2) == 3:
+                    if cSP2[0] == cSP2[1]: 
+                        print("Esta casilla es la misma que seleccionaste antes!!")
+                        m = startArray(4,4)
+                        pInGP = 0
+                    else:
+                        m = startArray(4,4)
+                        if nSP2[0] == nSP2[1]:  # Valorar si son números iguales y si es verdadero, hubo un ganador
+                            gC = False # Terminar juego
+                        else: # En el caso que no gana, se reinician los valores y cambia el turno
+                            nSP2.clear();cSP2.clear()
+                            print("-.-.-.-.-.-.-.- Siguiente turno!! -.-.-.-.-.-.-.-")
+                            m = startArray(4,4) # Reinicio la matriz mostrado
+                            pInGP = 0
+                            pT[1] += 1
+                elif len(nSP2) == 2:
+                    if nSP2[0] == nSP2[1]: # Valorar si son números iguales y si es verdadero, hubo un ganador
+                            gC = False # Terminar juego
+        else:
+            print("\t\t\tEsta no es una coordenada adecuada!!\n")
+            print("\t\t\tTiedes tu turno\n")
+            if pInGP == 0:
+                pT[pInGP] += 1
+                pInGP = 1
+            else:
+                pT[pInGP] += 1
+                pInGP = 0
+            m = startArray(4,4)
+    print("\n\t\t\t¡¡{} fue el ganador!!\n".format(pInG[pInGP]))
+    print("\n\t\t\tLe tomó un total de {} turnos para ganar!\n".format(pT[pInGP]))
     print("\t\t\t¿Quieres jugar de nuevo?\n")
-    playGame = int(input("Ingresa 1 y enter para jugar de nuevo!\t\Ingresa 0 y enter para cerrar el juego :("))
+    playGame = int(input("Ingresa 1 y enter para jugar de nuevo!\t\tIngresa 0 y enter para cerrar el juego :(\n"))
 
 print("\n\t\t\tNos vemos la próxima!")
 
