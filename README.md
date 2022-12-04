@@ -1,2 +1,3 @@
-# Proyecto final
-Proyectos y codigos del tec entre Agosto y Diciembre 2021
+# 2019Projects
+
+These have been some little projects that I've done to practice from the year 2019
